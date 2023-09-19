@@ -1,0 +1,13 @@
+# Define variables for WAS 9 Network Deployment Fix Packs
+__was_fp_version_latest: "9.0.0.x"  # Replace with the actual version
+__was_fp_files_latest:
+  - { file_name: "9.0.0.x-WAS-ND-FP0000000-part1.zip", check_sum: "replace_with_sha256_hash" }
+  - { file_name: "9.0.0.x-WAS-ND-FP0000000-part2.zip", check_sum: "replace_with_sha256_hash" }
+  - { file_name: "9.0.0.x-WAS-ND-FP0000000-part3.zip", check_sum: "replace_with_sha256_hash" }
+
+# Define the default fix pack version and files to use
+__this_version: "{{ was_fp_version | default( __was_fp_version_latest ) }}"
+__this_files: "{{ was_fp_files | default( __was_fp_files_latest ) }}"
+__version_check: "Updated to com.ibm.websphere.ND.v9_{{ __this_version }}"
+
+# Other variables remain the same

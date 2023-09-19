@@ -1,0 +1,18 @@
+---
+__tmp_dir:              "{{ tmp_dir | default('/apps/IBM/Binaries') }}/was"
+__logs_dir:             "{{ tmp_dir | default('/apps/IBM/Binaries') }}/logs"
+__iim_install_location: "{{ iim_install_location  | default('/apps/IBM/InstallationManager') }}"
+__was_install_location: "{{ was_install_location  | default('/apps/IBM/WebSphere/AppServer') }}"
+__imshared_location:    "{{ imshared_location  | default('/apps/IBM/IMShared') }}"
+__now:                  "{{ lookup('pipe', 'date +%Y%m%d%H%M%S') }}"
+__rsp_file:             "{{ __logs_dir }}/was_nd.rsp"
+__log_file:             "{{ __logs_dir }}/was_nd_install.{{ __now }}.log"
+__tpl_file:             "was_nd.rsp.j2"
+__was_files:
+  - { file_name: WAS_ND_V9.0_1_OF_3.zip, check_sum: replace_with_sha256_hash }
+  - { file_name: WAS_ND_V9.0_2_OF_3.zip, check_sum: replace_with_sha256_hash }
+  - { file_name: WAS_ND_V9.0_3_OF_3.zip, check_sum: replace_with_sha256_hash }
+__this_version:         "{{ was_version | default('9.0.0.0') }}"
+__product_id:           "\"id='com.ibm.websphere.ND.v90'\""
+__version_check:        "Installed com.ibm.websphere.ND.v90_9.0.0"
+__iim_product_id:       "\"id='com.ibm.cic.agent'\""

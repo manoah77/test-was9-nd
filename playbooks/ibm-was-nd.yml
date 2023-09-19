@@ -1,0 +1,71 @@
+# Install WebSphere Application Server - Network Deployment
+#
+# Variables used in this playbook that can be setup at hosts file.
+#
+# Location of installation Files
+#   was_repository_url:  
+#   was_repository_path:    
+#
+# How to Run
+#
+
+# ansible-playbook -i environments/hosts.devt -u <username> -k playbooks/ibm-was-nd.yml
+#
+#
+# vars:
+#   tmp_dir: "/apps/IBM/Binaries/was"
+#   iim_install_location: "/apps/IBM/InstallationManager"
+#   was_install_location: "/apps/IBM/WebSphere/AppServer"
+#   imshared_location: "/apps/IBM/IMShared"
+
+#   was_version: "9.0.0.0"
+#   was_files:
+#     - { file_name: WAS_ND_V9.0.0_1_OF_3.zip, check_sum: your_checksum_here }
+#     - { file_name: WAS_ND_V9.0.0_2_OF_3.zip, check_sum: your_checksum_here }
+#     - { file_name: WAS_ND_V9.0.0_3_OF_3.zip, check_sum: your_checksum_here }
+
+#   was_fp_version: "9.0.0.0-FP001"
+#   was_fp_files:
+#     - { file_name: 9.0.0.1-WS-WAS-FP001-part1.zip, check_sum: your_checksum_here }
+#     - { file_name: 9.0.0.1-WS-WAS-FP001-part2.zip, check_sum: your_checksum_here }
+
+#   was_java_version: "8.0.2010.20160224_1829"
+#   was_java_files:
+#     - { file_name: 8.0.2.10-WS-IBMWASJAVA-Linux.zip, check_sum: your_checksum_here }
+
+---
+- name: Install WebSphere Application Server - Network Deployment
+  hosts: dmgr,was_servers
+  become: true
+  roles:
+    - roles/installation-manager-install
+    - roles/was-nd-install
+    - roles/was-nd-fix-install
+    - roles/was-java-install
+
+- name: Setup DMGR
+  hosts: dmgr
+  become: true
+  roles:
+    - roles/was-dmgr-create-profile
+    - roles/was-dmgr-start
+    - roles/was-dmgr-import-tls-cert
+    - roles/was-dmgr-config-ldap
+    - roles/was-dmgr-config-jvm
+    - roles/was-dmgr-restart
+
+- name: Setup WAS Nodes
+  hosts: was_servers
+  serial: 1
+  become: true
+  roles:
+    - roles/was-profile-create  
+    - roles/was-nd-nodeagent-start  
+
+- name: Setup HTTP Servers on DMGR
+  hosts: dmgr
+  become: true
+  roles:
+    - roles/was-dmgr-config-webserver
+
+# To configure specific WAS 9 features add more roles or tasks.

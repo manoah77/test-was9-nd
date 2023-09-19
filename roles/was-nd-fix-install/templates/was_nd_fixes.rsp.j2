@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<agent-input>
+  <variables>
+    <variable name='sharedLocation' value='{{ __imshared_location }}'/>
+  </variables>
+  <server>
+    <repository location='{{ __tmp_dir }}'/>
+  </server>
+  <profile id='IBM WebSphere Application Server V9.0' installLocation='{{ __was_install_location }}'>
+    <data key='eclipseLocation' value='{{ __was_install_location }}'/>
+    <data key='user.import.profile' value='false'/>
+    <data key='cic.selector.arch' value='x86_64'/>  <!-- Update architecture -->
+  </profile>
+  <install>
+    <offering profile='IBM WebSphere Application Server V9.0' id='com.ibm.websphere.ND.v90' version='{{ __this_version }}' features='com.ibm.sdk.8_64bit,core.feature,ejbdeploy,embeddablecontainer,thinclient'/>  <!-- Update version and features -->
+  </install>
+  <preference name='com.ibm.cic.common.core.preferences.eclipseCache' value='{{ __imshared_location }}'/>
+  <preference name='offering.service.repositories.areUsed' value='false'/>
+</agent-input>
